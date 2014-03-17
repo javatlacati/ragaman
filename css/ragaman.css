@@ -16,22 +16,53 @@ body {
     font-weight:bold;
     text-align:center;
 }
+div.wrap {
+    width:1000px;
+    margin:auto;
+    margin-top:100px;
+    padding:0;
+}
+div.header {
+    font-size:50pt;
+    padding:20px;
+    padding:0;
+    margin:0;
+}
+div.top {
+    height:110px;
+    margin-top:30px;
+    margin-bottom:30px;
+    width:1000px;
+}
+div.main {
+}
 #current-word {
-    top:10%;
+    float:right;
+    width:500px;
+}
+#already-guessed {
+    float:left;
+    width: 260px;
+    padding:20px;
+    text-align:left;
+    font-size: 20pt;
 }
 #input {
-    top:12%;
+
 }
 #allwords {
     display:none;
 }
-#score {
-    position:absolute;
-    top:0;
-    left:0;
+#score, #time {
+    display:none;
+    font-size:15pt;
+    height:70px;
+    font-weight:normal;
+    padding:20px;
+    border-radius:5px;
+    width: 130px;
+    float:left;
 }
 #time {
-    position:absolute;
-    top:0;
-    right:0;
+    float:right;
 }
