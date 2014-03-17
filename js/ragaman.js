@@ -2,8 +2,6 @@
 CONSONANTS = "tttttnnnssshhrrddllcumwfgy";
 VOWELS = "eeeeeeeaaaaaoooiii";
 ALPHABET = "abcdefghijklmnopqrstuvwxyz";
-// PRESSURE = ["#FFFFFF", "#E5C9C7", "#E1A29D", "#E88C82", "#F97D77", "#FF6B61", "#FF5938"];
-// PRESSURE = ["#3D0F00", "#521400", "#661A00", "#7A1F00", "#8F2400", "#A32900", "#B82E00"];
 PRESSURE = ["#000000", "#003322", "#005544", "#008866", "#00aa88", "#00ddaa", "#00eebb"];
 SPACE = 32;
 ENTER = 13;
@@ -54,8 +52,8 @@ document.onkeydown = function(e) {
             score += current_guess.length * current_guess.length;
             already_guessed.push(current_guess);
             var guess_span = document.createElement("span");
-            guess_span.innerText += current_guess + "\n";
-            guess_span.style.color = PRESSURE[current_guess.length];
+            guess_span.innerText += current_guess + " ";
+            guess_span.style.color = PRESSURE[current_guess.length-1];
             html_already_guessed.appendChild(guess_span);
         }
         pool += current_guess;
@@ -92,6 +90,7 @@ function checkWord(word) {
 function pressure(level) {
     html_input.style.color = PRESSURE[level];
 }
+
 
 function second() {
     if (timeleft == 0) {
