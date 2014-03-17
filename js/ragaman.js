@@ -2,13 +2,15 @@
 CONSONANTS = "tttttnnnssshhrrddllcumwfgy";
 VOWELS = "eeeeeeeaaaaaoooiii";
 ALPHABET = "abcdefghijklmnopqrstuvwxyz";
-// PRESSURE = ["#E0E0E0", "#E5C9C7", "#E1A29D", "#E88C82", "#F97D77", "#FF6B61", "#FF5938"];
-PRESSURE = ["#3D0F00", "#521400", "#661A00", "#7A1F00", "#8F2400", "#A32900", "#B82E00"];
+// PRESSURE = ["#FFFFFF", "#E5C9C7", "#E1A29D", "#E88C82", "#F97D77", "#FF6B61", "#FF5938"];
+// PRESSURE = ["#3D0F00", "#521400", "#661A00", "#7A1F00", "#8F2400", "#A32900", "#B82E00"];
+PRESSURE = ["#000000", "#003322", "#005544", "#008866", "#00aa88", "#00ddaa", "#00eebb"];
 SPACE = 32;
 ENTER = 13;
 BACKSPACE = 8;
 
 function init() {
+    html_input.style.fontSize = "70pt";
     pool = "";
     possible_words = null;
     game_over = false;
@@ -18,12 +20,12 @@ function init() {
     timeleft = 60;
     pool = CONSONANTS.shuffle().substring(0,4) + VOWELS.shuffle().substring(0,3);
     pool_left = pool;
-    html_pool.innerText = pool.toLowerCase();
+    html_pool.innerText = pool;
+    html_already_guessed.innerText = "";
+    second(timeleft);
     timer = window.setInterval(function() {second();}, 1000);
     html_pool.innerText = pool;
-    //html_input.innerText = current_guess;
-    html_score.innerText = "Score: " + score;
-    html_time.innerText = "Time left: " + timeleft;
+    html_input.innerText = "";
     pressure(0);
 }
 
@@ -48,35 +50,39 @@ document.onkeydown = function(e) {
     current_guess = input.innerText;
     if (key == ENTER) {
         // submit
-        if (already_guessed.indexOf(current_guess) === -1 && checkWord(current_guess)) {
+        if (already_guessed.indexOf(current_guess) === -1 && current_guess.length > 0 && checkWord(current_guess)) {
             score += current_guess.length * current_guess.length;
             already_guessed.push(current_guess);
-            html_already_guessed.innerText += current_guess + "\n";
+            var guess_span = document.createElement("span");
+            guess_span.innerText += current_guess + "\n";
+            guess_span.style.color = PRESSURE[current_guess.length];
+            html_already_guessed.appendChild(guess_span);
         }
+        pool += current_guess;
         current_guess = "";
-        pool_left = pool;
         pressure(0);
     } else if (key == BACKSPACE && input.innerText.length > 0) {
         // delete
-        pool_left += current_guess.substr(current_guess.length-1);
+        pool += current_guess.substr(current_guess.length-1);
         current_guess = current_guess.substr(0,current_guess.length-1);
         pressure(current_guess.length);
     } else if (key == SPACE) {
         // shuffle
+        e.preventDefault();
         pool = pool.shuffle();
     } else {
         var character = String.fromCharCode(e.keyCode).toLowerCase();
-        var index = pool_left.indexOf(character);
+        var index = pool.indexOf(character);
         if (index != -1) {
             // input
             pressure(current_guess.length);
             current_guess += character;
-            pool_left = pool_left.substring(0,index) + pool_left.substring(1+index);
+            pool = pool.substring(0,index) + pool.substring(1+index);
         }
     }
     html_pool.innerText = pool;
     html_input.innerText = current_guess;
-    html_score.innerText = "Score: " + score;
+    html_score.innerText = "Score: " + score + "\n" + "Time left: " + timeleft;
 };
 
 function checkWord(word) {
@@ -92,15 +98,16 @@ function second() {
         // game over
         clearInterval(timer);
         html_input.innerText = "";
-        html_score.innerText = "";
-        html_pool.innerText = "GAME OVER! SCORE: " + score;
-        html_pool.innerText += "\npress any key to restart";
-        html_time.innerText = "";
-        html_already_guessed.innerText = "";
+        //html_score.innerText = "";
+        html_input.innerText = "GAME OVER! SCORE: " + score;
+        html_input.innerText += "\npress any key to restart";
+        html_input.style.fontSize = "13pt";
+        //html_time.innerText = "";
         game_over = true;
     } else {
         timeleft--;
-        html_time.innerText = "Time left: " + timeleft;
+        //html_time.innerText = "Time left: " + timeleft;
+        html_score.innerText = "Score: " + score + "\n" + "Time left: " + timeleft;
     }
 }
 
