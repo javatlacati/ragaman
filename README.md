@@ -1,1 +1,5 @@
-this will be a simple anagram word guessing game in the near future.
+Ragaman
+=======
+
+A simple anagram word guessing game. 
+Play it over at http://buesing.github.io/ragaman
