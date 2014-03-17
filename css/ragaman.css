@@ -25,3 +25,13 @@ body {
 #allwords {
     display:none;
 }
+#score {
+    position:absolute;
+    top:0;
+    left:0;
+}
+#time {
+    position:absolute;
+    top:0;
+    right:0;
+}
