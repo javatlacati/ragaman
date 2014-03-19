@@ -18,6 +18,7 @@ function init() {
     already_guessed = [];
     timeleft = 60;
     pool = CONSONANTS.shuffle().substring(0,4) + VOWELS.shuffle().substring(0,3);
+    pool = pool.shuffle();
     pool_left = pool;
     dom_pool.textContent = pool;
     dom_already_guessed.textContent = "";
