@@ -68,6 +68,9 @@ document.onkeydown = function(e) {
     if (key == ENTER) {
         // submit
         if (already_guessed.indexOf(current_guess) === -1 && current_guess.length > 0 && checkWord(current_guess)) {
+            if (current_guess.length >= 6) {
+                colorFade("header", "text", PRESSURE[6].substring(1), "FFFFFF", 25, 60);
+            }
             var s = current_guess.length * current_guess.length;
             score += s;
             already_guessed.push(current_guess);

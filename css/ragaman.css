@@ -43,13 +43,48 @@ body {
     font-size:72pt;
     font-weight:bold;
 }
-.wrap {
+footer {
+    color:#aaa;
+    font-size: 20pt;
+    text-align:center;
+    width: 100%;
+}
+h1 {
+    font-size: 20pt;
+    font-weight:bold;
+}
+sup {
+    vertical-align: super;
+    font-size: smaller;
+    font-weight: normal;
+}
+table {
+    margin-left: auto;
+    margin-right: auto;
+}
+td {
+    padding:0px;
+    padding-left: 10px;
+    margin:0px;
+}
+tr {
+    margin:0px;
+    padding:0px;
+}
+
+#container {
+	width: 100%;
+	float: left;
+	overflow: hidden;
+    min-height:400px;
+}
+#wrap {
     width:700px;
     margin: 0 auto;
     margin-top:50px;
     padding:0;
 }
-.header {
+#header {
     text-shadow: 1px 1px 0px #555;
     color:#fff;
     text-align:center;
@@ -58,12 +93,22 @@ body {
     padding:0;
     margin:0;
 }
+#score, #time {
+    text-align:left;
+    font-size:20pt;
+    font-weight:normal;
+    height:60px;
+    padding:10px;
+    padding-top:30px;
+    width: 200px;
+    float:right;
+}
 #current-pool {
     padding:0;
     padding-left:20px;
     padding-top:7px;
 }
-.top {
+#top {
     text-align:left;
     height:120px;
     margin-top:30px;
@@ -72,17 +117,9 @@ body {
     border-radius: 10px;
 
 }
-.container {
-	width: 100%;
-	float: left;
-	overflow: hidden;
-    min-height:400px;
-}
-.main {
+#main {
 	width: 100%;
 	position: relative;
-}
-#current-word {
 }
 #already-guessed {
     float:left;
@@ -98,31 +135,6 @@ body {
 #input {
 	padding: 0 0 0 320px;
 }
-#allwords {
-    display:none;
-}
-#score, #time {
-    text-align:left;
-    font-size:20pt;
-    font-weight:normal;
-    height:60px;
-    padding:10px;
-    padding-top:30px;
-    width: 200px;
-    float:right;
-}
-#time {
-}
-footer {
-    color:#aaa;
-    font-size: 20pt;
-    text-align:center;
-    width: 100%;
-}
-h1 {
-    font-size: 20pt;
-    font-weight:bold;
-}
 #scores {
     font-weight:normal;
     display:none;
@@ -132,21 +144,6 @@ h1 {
     font-size:20pt;
     margin-bottom:40px;
 }
-table {
-    margin-left: auto;
-    margin-right: auto;
-}
-td {
-    padding:0px;
-    padding-left: 10px;
-    margin:0px;
-}
-tr {
-    margin:0px;
-    padding:0px;
-}
-sup {
-    vertical-align: super;
-    font-size: smaller;
-    font-weight: normal;
+#allwords {
+    display:none;
 }
