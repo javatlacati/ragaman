@@ -40,7 +40,7 @@ body {
     width:100%;
     color:#000;
     font-family:"Helvetica", sans-serif;
-    font-size:70pt;
+    font-size:72pt;
     font-weight:bold;
 }
 .wrap {
@@ -59,12 +59,13 @@ body {
     margin:0;
 }
 #current-pool {
+    padding:0;
     padding-left:20px;
-    vertical-align:center;
+    padding-top:7px;
 }
 .top {
     text-align:left;
-    height:110px;
+    height:120px;
     margin-top:30px;
     margin-bottom:30px;
     width:100%;
