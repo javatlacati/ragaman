@@ -163,10 +163,12 @@ function build_score_table(sc, pos) {
         tr.appendChild(tbl_pool);
         if (i == pos) {
             tr.style.color = PRESSURE[6];
+            tr.style.fontWeight = "bold";
         }
         tbl.appendChild(tr);
     }
     dom_scores.appendChild(tbl);
+    dom_scores.innerHTML += "<hr>Press space to start a new game.";
 }
 
 function load_scores() {
