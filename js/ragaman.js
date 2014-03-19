@@ -154,7 +154,7 @@ document.onkeydown = function(e) {
             // input
             playSound("type");
             pressure(current_guess.length);
-            dom_char_score.innerHTML = "+" + VALUES[character];
+            dom_char_score.innerHTML = "+" + (VALUES[character]+1);
             colorFade("char-score", "text", "888888", "FFFFFF", 25, 40);
             current_guess += character;
             pool = pool.substring(0,index) + pool.substring(1+index);
