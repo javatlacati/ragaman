@@ -6,6 +6,7 @@ PRESSURE = ["#000000", "#003322", "#005544", "#008866", "#00aa88", "#00ddaa", "#
 SPACE = 32;
 ENTER = 13;
 BACKSPACE = 8;
+TAB = 9;
 
 function init() {
     dom_input.style.fontSize = "70pt";
@@ -51,7 +52,7 @@ String.prototype.shuffle = function () {
 document.onkeydown = function(e) {
     var key = e.keyCode;
     if (game_over) {
-        if (key == SPACE) {
+        if (key == SPACE || key == TAB) {
             document.getElementById("main").style.display = "block";
             document.getElementById("scores").style.display = "none";
             init();
@@ -60,13 +61,17 @@ document.onkeydown = function(e) {
         }
     }
     current_guess = input.innerText;
+    if (key == TAB) {
+        init();
+    }
     if (key == ENTER) {
         // submit
         if (already_guessed.indexOf(current_guess) === -1 && current_guess.length > 0 && checkWord(current_guess)) {
-            score += current_guess.length * current_guess.length;
+            var s = current_guess.length * current_guess.length;
+            score += s;
             already_guessed.push(current_guess);
             var guess_span = document.createElement("span");
-            guess_span.innerText += current_guess + " ";
+            guess_span.innerHTML += current_guess + "<sup>" + s + "</sup> ";
             guess_span.style.color = PRESSURE[current_guess.length-1];
             dom_already_guessed.appendChild(guess_span);
         }
@@ -120,13 +125,13 @@ function second() {
             while (i < scores.length && scores[i][1] > score) {
                 i++;
             }
-            if (i < 10) {
+            if (score > 0 && i < 10) {
                 scores.splice(i, 0, [pool, score]);
                 if (scores.length > 10) {
                     scores.pop();
                 }
             }
-            build_score_table(scores, i);
+            build_score_table(scores, score > 0 ? i : 10);
             save_scores();
         }
         dom_input.innerText = "";

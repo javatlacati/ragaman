@@ -142,3 +142,8 @@ tr {
     margin:0px;
     padding:0px;
 }
+sup {
+    vertical-align: super;
+    font-size: smaller;
+    font-weight: normal;
+}
