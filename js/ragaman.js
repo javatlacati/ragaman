@@ -15,7 +15,7 @@ function init() {
     current_guess = "";
     score = 0;
     already_guessed = [];
-    timeleft = 5;
+    timeleft = 60;
     pool = CONSONANTS.shuffle().substring(0,4) + VOWELS.shuffle().substring(0,3);
     pool_left = pool;
     dom_pool.innerText = pool;
