@@ -31,6 +31,7 @@ time, mark, audio, video {
 	vertical-align: baseline;
 }
 html {
+    line-height: 1;
 	width:100%;
 	top:0;
 }
@@ -38,7 +39,7 @@ body {
     text-align:left;
     width:100%;
     color:#000;
-    font-family:sans-serif;
+    font-family:"Helvetica", sans-serif;
     font-size:70pt;
     font-weight:bold;
 }
@@ -59,7 +60,7 @@ body {
 }
 #current-pool {
     padding-left:20px;
-
+    vertical-align:center;
 }
 .top {
     text-align:left;
@@ -102,10 +103,10 @@ body {
 #score, #time {
     text-align:left;
     font-size:20pt;
+    font-weight:normal;
     height:60px;
     padding:10px;
     padding-top:25px;
-    border-radius:5px;
     width: 200px;
     float:right;
 }
