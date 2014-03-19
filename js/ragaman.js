@@ -1,3 +1,5 @@
+// sorry for the messy code
+
 // constants
 CONSONANTS = "ttttttnnnnsssshhhrrrdddlllccmwfgypbvkjxqz";
 VOWELS = "eeeeaaaaaoooiii";
@@ -7,6 +9,34 @@ SPACE = 32;
 ENTER = 13;
 BACKSPACE = 8;
 TAB = 9;
+VALUES = {
+    "a": 1,
+    "b": 3,
+    "c": 3,
+    "d": 2,
+    "e": 1,
+    "f": 4,
+    "g": 2,
+    "h": 4,
+    "i": 1,
+    "j": 8,
+    "k": 5,
+    "l": 1,
+    "m": 3,
+    "n": 1,
+    "o": 1,
+    "p": 3,
+    "q": 10,
+    "r": 1,
+    "s": 1,
+    "t": 1,
+    "u": 1,
+    "v": 4,
+    "w": 4,
+    "x": 8,
+    "y": 4,
+    "z": 10
+};
 
 channel_max = 4;
 audiochannels = new Array();
@@ -78,7 +108,7 @@ String.prototype.shuffle = function () {
 document.onkeydown = function(e) {
     var key = e.keyCode;
     if (game_over) {
-        if (key == SPACE || key == TAB) {
+        if (key == SPACE) {
             document.getElementById("main").style.display = "block";
             document.getElementById("scores").style.display = "none";
             init();
@@ -86,7 +116,7 @@ document.onkeydown = function(e) {
             return;
         }
     }
-    current_guess = input.textContent;
+    current_guess = dom_input.textContent.toLowerCase();
     if (key == TAB) {
         init();
     }
@@ -97,7 +127,7 @@ document.onkeydown = function(e) {
             if (current_guess.length >= 6) {
                 colorFade("header", "text", PRESSURE[6].substring(1), "FFFFFF", 25, 60);
             }
-            var s = current_guess.length * current_guess.length;
+            var s = calculateScore(current_guess);
             score += s;
             already_guessed.push(current_guess);
             var guess_span = document.createElement("span");
@@ -108,7 +138,7 @@ document.onkeydown = function(e) {
         pool += current_guess;
         current_guess = "";
         pressure(0);
-    } else if (key == BACKSPACE && input.textContent.length > 0) {
+    } else if (key == BACKSPACE && dom_input.textContent.length > 0) {
         // delete
         pool += current_guess.substr(current_guess.length-1);
         current_guess = current_guess.substr(0,current_guess.length-1);
@@ -124,6 +154,8 @@ document.onkeydown = function(e) {
             // input
             playSound("type");
             pressure(current_guess.length);
+            dom_char_score.innerHTML = "+" + VALUES[character];
+            colorFade("char-score", "text", "888888", "FFFFFF", 25, 40);
             current_guess += character;
             pool = pool.substring(0,index) + pool.substring(1+index);
         }
@@ -135,6 +167,14 @@ document.onkeydown = function(e) {
 
 function checkWord(word) {
     return all_words.indexOf(word) != -1;
+}
+
+function calculateScore(word) {
+    var sc = 0;
+    for (var i = 0; i < word.length; i++) {
+        sc += VALUES[word[i]];
+    }
+    return sc + word.length;
 }
 
 function pressure(level) {
@@ -166,10 +206,6 @@ function second() {
             save_scores();
         }
         dom_input.textContent = "";
-        //dom_score.textContent = "";
-        dom_input.innerHTML = "Game over. Score: " + score;
-        dom_input.innerHTML += "<br>press space to restart";
-        dom_input.style.fontSize = "20pt";
         //dom_time.textContent = "";
         game_over = true;
     } else {
@@ -182,18 +218,18 @@ function second() {
 function build_score_table(sc, pos) {
     dom_scores.innerHTML = "<h1>"
     if (pos < 10) {
-        dom_scores.innerHTML += "New Highscore! ";
+        dom_scores.innerHTML += "<b>New Highscore!</b> ";
     }
-    dom_scores.innerHTML += "Your Highscores:</h1><hr>";
+    dom_scores.innerHTML += "Your Highscores:</h1>";
     var tbl = document.createElement("table");
     for (var i = 0; i < sc.length; i++) {
         var tr = document.createElement("tr");
         var tbl_pool = document.createElement("td");
         var tbl_score = document.createElement("td");
         var tbl_place = document.createElement("td");
-        tbl_place.textContent = "#" + (i+1) + ":";
+        tbl_place.textContent = (i+1);
         tbl_pool.textContent = sc[i][0];
-        tbl_score.textContent = sc[i][1] + ",";
+        tbl_score.textContent = sc[i][1];
         tr.appendChild(tbl_place);
         tr.appendChild(tbl_score);
         tr.appendChild(tbl_pool);
@@ -204,7 +240,7 @@ function build_score_table(sc, pos) {
         tbl.appendChild(tr);
     }
     dom_scores.appendChild(tbl);
-    dom_scores.innerHTML += "<hr>Press space to start a new game.";
+    dom_scores.innerHTML += "Press space to start a new game.";
 }
 
 function load_scores() {
@@ -237,10 +273,11 @@ window.onload = function() {
     sound_on = true;
     load_scores();
     dom_scores = document.getElementById("scores");
-    dom_input = document.getElementById("input");
+    dom_input = document.getElementById("inner-input");
     dom_score = document.getElementById("score");
     dom_pool = document.getElementById("current-pool");
     dom_time = document.getElementById("time");
+    dom_char_score = document.getElementById("char-score");
     dom_already_guessed = document.getElementById("already-guessed");
     all_words = document.getElementById("allwords").textContent.split("\n");
     dom_sound = document.getElementById("sound");
@@ -251,12 +288,17 @@ window.onload = function() {
             dom_soundoff.style.display = "none";
             dom_soundon.style.display = "block";
             sound_on = false;
+            localStorage["sound"] = "false";
         }
         else {
             dom_soundoff.style.display = "block";
             dom_soundon.style.display = "none";
             sound_on = true;
+            localStorage["sound"] = "true";
         }
     };
+    if (localStorage["sound"] == "false") {
+        dom_sound.onclick();
+    }
     init();
 };
