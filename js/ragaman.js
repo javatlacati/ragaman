@@ -1,5 +1,5 @@
 // constants
-CONSONANTS = "tttttnnnssshhrrddllcumwfgy";
+CONSONANTS = "ttttttnnnnsssshhhrrrdddlllccmwfgypbvkjxqz";
 VOWELS = "eeeeeeeaaaaaoooiii";
 ALPHABET = "abcdefghijklmnopqrstuvwxyz";
 PRESSURE = ["#000000", "#003322", "#005544", "#008866", "#00aa88", "#00ddaa", "#00eebb"];
@@ -8,23 +8,31 @@ ENTER = 13;
 BACKSPACE = 8;
 
 function init() {
-    html_input.style.fontSize = "70pt";
+    dom_input.style.fontSize = "70pt";
     pool = "";
     possible_words = null;
     game_over = false;
     current_guess = "";
     score = 0;
     already_guessed = [];
-    timeleft = 60;
+    timeleft = 5;
     pool = CONSONANTS.shuffle().substring(0,4) + VOWELS.shuffle().substring(0,3);
     pool_left = pool;
-    html_pool.innerText = pool;
-    html_already_guessed.innerText = "";
+    dom_pool.innerText = pool;
+    dom_already_guessed.innerText = "";
     second(timeleft);
     timer = window.setInterval(function() {second();}, 1000);
-    html_pool.innerText = pool;
-    html_input.innerText = "";
+    dom_pool.innerText = pool;
+    dom_input.innerText = "";
     pressure(0);
+}
+
+function supports_html5_storage() {
+    try {
+        return 'localStorage' in window && window['localStorage'] !== null;
+    } catch (e) {
+        return false;
+    }
 }
 
 String.prototype.shuffle = function () {
@@ -41,10 +49,16 @@ String.prototype.shuffle = function () {
 }
 
 document.onkeydown = function(e) {
-    if (game_over) {
-        init();
-    }
     var key = e.keyCode;
+    if (game_over) {
+        if (key == SPACE) {
+            document.getElementById("main").style.display = "block";
+            document.getElementById("scores").style.display = "none";
+            init();
+        } else {
+            return;
+        }
+    }
     current_guess = input.innerText;
     if (key == ENTER) {
         // submit
@@ -54,7 +68,7 @@ document.onkeydown = function(e) {
             var guess_span = document.createElement("span");
             guess_span.innerText += current_guess + " ";
             guess_span.style.color = PRESSURE[current_guess.length-1];
-            html_already_guessed.appendChild(guess_span);
+            dom_already_guessed.appendChild(guess_span);
         }
         pool += current_guess;
         current_guess = "";
@@ -78,9 +92,9 @@ document.onkeydown = function(e) {
             pool = pool.substring(0,index) + pool.substring(1+index);
         }
     }
-    html_pool.innerText = pool;
-    html_input.innerText = current_guess;
-    html_score.innerText = "Score: " + score + "\n" + "Time left: " + timeleft;
+    dom_pool.innerText = pool;
+    dom_input.innerText = current_guess;
+    dom_score.innerText = "Score: " + score + "\n" + "Time left: " + timeleft;
 };
 
 function checkWord(word) {
@@ -88,34 +102,107 @@ function checkWord(word) {
 }
 
 function pressure(level) {
-    html_input.style.color = PRESSURE[level];
+    dom_input.style.color = PRESSURE[level];
 }
 
 
 function second() {
     if (timeleft == 0) {
         // game over
+        // rebuild pool in case stuff was entered already
         clearInterval(timer);
-        html_input.innerText = "";
-        //html_score.innerText = "";
-        html_input.innerText = "GAME OVER! SCORE: " + score;
-        html_input.innerText += "\npress any key to restart";
-        html_input.style.fontSize = "13pt";
-        //html_time.innerText = "";
+        pool += current_guess;
+        document.getElementById("main").style.display = "none";
+        document.getElementById("scores").style.display = "block";
+        if (scores != null) {
+            // add highscore if relevant
+            var i = 0;
+            while (i < scores.length && scores[i][1] > score) {
+                i++;
+            }
+            if (i < 10) {
+                scores.splice(i, 0, [pool, score]);
+                if (scores.length > 10) {
+                    scores.pop();
+                }
+            }
+            build_score_table(scores, i);
+            save_scores();
+        }
+        dom_input.innerText = "";
+        //dom_score.innerText = "";
+        dom_input.innerText = "Game over. Score: " + score;
+        dom_input.innerText += "\npress space to restart";
+        dom_input.style.fontSize = "20pt";
+        //dom_time.innerText = "";
         game_over = true;
     } else {
         timeleft--;
-        //html_time.innerText = "Time left: " + timeleft;
-        html_score.innerText = "Score: " + score + "\n" + "Time left: " + timeleft;
+        //dom_time.innerText = "Time left: " + timeleft;
+        dom_score.innerText = "Score: " + score + "\n" + "Time left: " + timeleft;
+    }
+}
+
+function build_score_table(sc, pos) {
+    dom_scores.innerHTML = "<h1>"
+    if (pos < 10) {
+        dom_scores.innerHTML += "New Highscore! ";
+    }
+    dom_scores.innerHTML += "Your Highscores:</h1><hr>";
+    var tbl = document.createElement("table");
+    for (var i = 0; i < sc.length; i++) {
+        var tr = document.createElement("tr");
+        var tbl_pool = document.createElement("td");
+        var tbl_score = document.createElement("td");
+        var tbl_place = document.createElement("td");
+        tbl_place.innerText = "#" + (i+1) + ":";
+        tbl_pool.innerText = sc[i][0];
+        tbl_score.innerText = sc[i][1] + ",";
+        tr.appendChild(tbl_place);
+        tr.appendChild(tbl_score);
+        tr.appendChild(tbl_pool);
+        if (i == pos) {
+            tr.style.color = PRESSURE[6];
+        }
+        tbl.appendChild(tr);
+    }
+    dom_scores.appendChild(tbl);
+}
+
+function load_scores() {
+    scores = [];
+    if (supports_html5_storage()) {
+        if (localStorage["hasscores"] == "true") {
+            for (var i = 0; i < 10; i++) {
+                if (localStorage["score_" + i] == null) {
+                    break;
+                }
+                var s = parseInt(localStorage["score_" + i]);
+                var p = localStorage["pool_" + i];
+                scores.push([p, s]);
+            }
+        }
+    }
+}
+
+function save_scores() {
+    if (supports_html5_storage()) {
+        for (var i = 0; i < scores.length; i++) {
+            localStorage["pool_" + i] = scores[i][0];
+            localStorage["score_" + i] = scores[i][1];
+        }
+        localStorage["hasscores"] = "true";
     }
 }
 
 window.onload = function() {
-    html_input = document.getElementById("input");
-    html_score = document.getElementById("score");
-    html_pool = document.getElementById("current-pool");
-    html_time = document.getElementById("time");
-    html_already_guessed = document.getElementById("already-guessed");
+    load_scores();
+    dom_scores = document.getElementById("scores");
+    dom_input = document.getElementById("input");
+    dom_score = document.getElementById("score");
+    dom_pool = document.getElementById("current-pool");
+    dom_time = document.getElementById("time");
+    dom_already_guessed = document.getElementById("already-guessed");
     all_words = document.getElementById("allwords").innerText.split("\n");
     init();
 };
