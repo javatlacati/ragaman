@@ -8,8 +8,33 @@ ENTER = 13;
 BACKSPACE = 8;
 TAB = 9;
 
+channel_max = 4;
+audiochannels = new Array();
+
+for (i = 0; i < channel_max; i++) {
+	audiochannels[i] = new Array();
+	audiochannels[i]['channel'] = new Audio();
+	audiochannels[i]['finished'] = -1;
+}
+
+function playSound(s) {
+    if (!sound_on) {
+        return;
+    }
+	for (i = 0; i < audiochannels.length; i++) {
+		thistime = new Date();
+		if (audiochannels[i]['finished'] < thistime.getTime()) { // is this channel finished?
+			audiochannels[i]['finished'] = thistime.getTime() + document.getElementById(s).duration*1000;
+			audiochannels[i]['channel'].src = document.getElementById(s).src;
+			audiochannels[i]['channel'].load();
+			audiochannels[i]['channel'].play();
+			break;
+		}
+	}
+}
+
 function init() {
-    dom_input.style.fontSize = "70pt";
+    sound_on = true;
     pool = "";
     possible_words = null;
     game_over = false;
@@ -68,6 +93,7 @@ document.onkeydown = function(e) {
     if (key == ENTER) {
         // submit
         if (already_guessed.indexOf(current_guess) === -1 && current_guess.length > 0 && checkWord(current_guess)) {
+            playSound("send");
             if (current_guess.length >= 6) {
                 colorFade("header", "text", PRESSURE[6].substring(1), "FFFFFF", 25, 60);
             }
@@ -96,6 +122,7 @@ document.onkeydown = function(e) {
         var index = pool.indexOf(character);
         if (index != -1) {
             // input
+            playSound("type");
             pressure(current_guess.length);
             current_guess += character;
             pool = pool.substring(0,index) + pool.substring(1+index);
@@ -215,5 +242,20 @@ window.onload = function() {
     dom_time = document.getElementById("time");
     dom_already_guessed = document.getElementById("already-guessed");
     all_words = document.getElementById("allwords").textContent.split("\n");
+    dom_sound = document.getElementById("sound");
+    dom_soundoff = document.getElementById("mute");
+    dom_soundon = document.getElementById("high");
+    dom_sound.onclick = function() {
+        if (sound_on) {
+            dom_soundoff.style.display = "none";
+            dom_soundon.style.display = "block";
+            sound_on = false;
+        }
+        else {
+            dom_soundoff.style.display = "block";
+            dom_soundon.style.display = "none";
+            sound_on = true;
+        }
+    };
     init();
 };
