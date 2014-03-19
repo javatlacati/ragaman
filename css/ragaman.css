@@ -71,6 +71,9 @@ tr {
     margin:0px;
     padding:0px;
 }
+hr {
+    width: 500px;
+}
 
 #container {
 	width: 100%;
@@ -146,4 +149,8 @@ tr {
 }
 #allwords {
     display:none;
+}
+#tweet-divide {
+    margin-top:30px;
+    margin-bottom:30px;
 }

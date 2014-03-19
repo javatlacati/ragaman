@@ -1,6 +1,6 @@
 // constants
 CONSONANTS = "ttttttnnnnsssshhhrrrdddlllccmwfgypbvkjxqz";
-VOWELS = "eeeeeeeaaaaaoooiii";
+VOWELS = "eeeeaaaaaoooiii";
 ALPHABET = "abcdefghijklmnopqrstuvwxyz";
 PRESSURE = ["#000000", "#003322", "#005544", "#008866", "#00aa88", "#00ddaa", "#00eebb"];
 SPACE = 32;
@@ -17,7 +17,7 @@ function init() {
     score = 0;
     already_guessed = [];
     timeleft = 60;
-    pool = CONSONANTS.shuffle().substring(0,4) + VOWELS.shuffle().substring(0,3);
+    pool = "e" + CONSONANTS.shuffle().substring(0,4) + VOWELS.shuffle().substring(0,2);
     pool = pool.shuffle();
     pool_left = pool;
     dom_pool.textContent = pool;
