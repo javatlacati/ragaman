@@ -84,13 +84,14 @@ body {
 }
 #already-guessed {
     float:left;
-    width: 170px;
+    width: 200px;
     padding:20px;
     text-align:left;
-    font-size: 20pt;
+    font-size: 17pt;
 	position: relative;
     text-align:left;
     border-radius: 5px;
+    margin-bottom:30px;
 }
 #input {
 	padding: 0 0 0 320px;
