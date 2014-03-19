@@ -36,6 +36,7 @@ html {
 	top:0;
 }
 body {
+    background-color:#fff;
     margin-top:0;
     text-align:left;
     width:100%;
@@ -98,10 +99,11 @@ img {
     min-height:400px;
 }
 #wrap {
-    width:700px;
+    background-color:#fff;
+    border-radius: 20px;
+    width: 700px;
     margin: 0 auto;
     margin-top:50px;
-    padding:0;
 }
 #header {
     text-shadow: 1px 1px 0px #555;
@@ -141,8 +143,7 @@ img {
 	position: relative;
 }
 #already-guessed {
-    float:left;
-    width: 200px;
+    width: 94%;
     padding:20px;
     text-align:left;
     font-size: 17pt;
@@ -152,7 +153,10 @@ img {
     margin-bottom:30px;
 }
 #input {
-	padding: 0 0 0 320px;
+    width:100%;
+    text-align:center;
+    font-size:70pt;
+    height:120px;
 }
 #scores {
     font-weight:normal;

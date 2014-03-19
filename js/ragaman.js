@@ -34,7 +34,7 @@ function playSound(s) {
 }
 
 function init() {
-    sound_on = true;
+    dom_input.style.fontSize = "70pt";
     pool = "";
     possible_words = null;
     game_over = false;
@@ -234,6 +234,7 @@ function save_scores() {
 }
 
 window.onload = function() {
+    sound_on = true;
     load_scores();
     dom_scores = document.getElementById("scores");
     dom_input = document.getElementById("input");
