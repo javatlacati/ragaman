@@ -147,6 +147,7 @@ document.onkeydown = function(e) {
         pressure(0);
     } else if (key == BACKSPACE && dom_input.textContent.length > 0) {
         // delete
+        e.preventDefault();
         pool += current_guess.substr(current_guess.length-1);
         current_guess = current_guess.substr(0,current_guess.length-1);
         pressure(current_guess.length);
