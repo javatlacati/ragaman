@@ -1,8 +1,6 @@
 // sorry for the messy code
 
 // constants
-CONSONANTS = "ttttttnnnnsssshhhrrrdddlllccmwfgypbvkjxqz";
-VOWELS = "eeeeaaaaaoooiii";
 ALPHABET = "abcdefghijklmnopqrstuvwxyz";
 PRESSURE = ["#000000", "#003322", "#005544", "#008866", "#00aa88", "#00ddaa", "#00eebb"];
 SPACE = 32;
@@ -84,13 +82,6 @@ function init() {
 }
 
 function get_pool() {
-    /*var pl = "e" + CONSONANTS.shuffle().substring(0,4) + VOWELS.shuffle().substring(0,2);*/
-    /*pl = pl.shuffle();*/
-    /*if (pl.indexOf("q") != -1) {*/
-    /*pl = pl.substring(0,6);*/
-    /*pl += "u";*/
-    /*console.log("q detected");*/
-    /*}*/
     pl = "";
     while (pl.length != 7) {
         pl = all_words[Math.floor(Math.random()*all_words.length)];
