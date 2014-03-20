@@ -1,12 +1,14 @@
 // sorry for the messy code
 
 // constants
-ALPHABET = "abcdefghijklmnopqrstuvwxyz";
 PRESSURE = ["#000000", "#003322", "#005544", "#008866", "#00aa88", "#00ddaa", "#00eebb"];
 SPACE = 32;
 ENTER = 13;
 BACKSPACE = 8;
 TAB = 9;
+UE = 187;
+OE = 186;
+AE = 222;
 VALUES = {
     "a": 1,
     "b": 3,
@@ -34,6 +36,38 @@ VALUES = {
     "x": 8,
     "y": 4,
     "z": 10
+};
+
+VALUES_GERMAN = {
+    "a": 1,
+    "b": 3,
+    "c": 4,
+    "d": 1,
+    "e": 1,
+    "f": 4,
+    "g": 2,
+    "h": 2,
+    "i": 1,
+    "j": 6,
+    "k": 4,
+    "l": 2,
+    "m": 3,
+    "n": 1,
+    "o": 2,
+    "p": 4,
+    "q": 10,
+    "r": 1,
+    "s": 1,
+    "t": 1,
+    "u": 1,
+    "v": 6,
+    "w": 3,
+    "x": 8,
+    "y": 10,
+    "z": 3,
+    "ä": 6,
+    "ü": 6,
+    "ö": 8
 };
 
 channel_max = 4;
@@ -164,8 +198,19 @@ document.onkeydown = function(e) {
         e.preventDefault();
         pool = pool.shuffle();
     } else {
-        var character = String.fromCharCode(e.keyCode).toLowerCase();
+        var character = "";
+        if (e.keyCode == UE) {
+            character = "ü";
+        } else if (e.keyCode == AE) {
+            character = "ä";
+        } else if (e.keyCode == OE) {
+            character = "ö";
+        } else {
+            var character = String.fromCharCode(e.keyCode).toLowerCase();
+        }
         var index = pool.indexOf(character);
+        console.log(character);
+        console.log(e.keyCode);
         if (index != -1) {
             // input
             playSound("type");
