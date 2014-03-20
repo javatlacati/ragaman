@@ -84,14 +84,18 @@ function init() {
 }
 
 function get_pool() {
-    var pl = "e" + CONSONANTS.shuffle().substring(0,4) + VOWELS.shuffle().substring(0,2);
-    pl = pl.shuffle();
-    if (pl.indexOf("q") != -1) {
-        pl = pl.substring(0,6);
-        pl += "u";
-        console.log("q detected");
+    /*var pl = "e" + CONSONANTS.shuffle().substring(0,4) + VOWELS.shuffle().substring(0,2);*/
+    /*pl = pl.shuffle();*/
+    /*if (pl.indexOf("q") != -1) {*/
+    /*pl = pl.substring(0,6);*/
+    /*pl += "u";*/
+    /*console.log("q detected");*/
+    /*}*/
+    pl = "";
+    while (pl.length != 7) {
+        pl = all_words[Math.floor(Math.random()*all_words.length)];
     }
-    return pl;
+    return pl.shuffle();
 }
 
 function supports_html5_storage() {
