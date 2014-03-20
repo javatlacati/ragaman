@@ -134,10 +134,10 @@ document.onkeydown = function(e) {
         // submit
         if (already_guessed.indexOf(current_guess) === -1 && current_guess.length > 0 && checkWord(current_guess)) {
             playSound("send");
-            if (current_guess.length == 6) {
+            if (current_guess.length >= 6) {
                 colorFade("header", "text", "5ccdc9", "FFFFFF", 25, 60);
             } if (current_guess.length == 7) {
-                colorFade("bg", "background", "5ccdc9", "FFFFFF", 25, 60);
+                // colorFade("bg", "background", "5ccdc9", "FFFFFF", 25, 60);
             }
             var s = calculateScore(current_guess);
             score += s;
