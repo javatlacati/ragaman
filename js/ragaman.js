@@ -72,8 +72,7 @@ function init() {
     score = 0;
     already_guessed = [];
     timeleft = 60;
-    pool = "e" + CONSONANTS.shuffle().substring(0,4) + VOWELS.shuffle().substring(0,2);
-    pool = pool.shuffle();
+    pool = get_pool();
     pool_left = pool;
     dom_pool.textContent = pool;
     dom_already_guessed.textContent = "";
@@ -82,6 +81,17 @@ function init() {
     dom_pool.textContent = pool;
     dom_input.textContent = "";
     pressure(0);
+}
+
+function get_pool() {
+    var pl = "e" + CONSONANTS.shuffle().substring(0,4) + VOWELS.shuffle().substring(0,2);
+    pl = pl.shuffle();
+    if (pl.indexOf("q") != -1) {
+        pl = pl.substring(0,6);
+        pl += "u";
+        console.log("q detected");
+    }
+    return pl;
 }
 
 function supports_html5_storage() {
@@ -124,8 +134,10 @@ document.onkeydown = function(e) {
         // submit
         if (already_guessed.indexOf(current_guess) === -1 && current_guess.length > 0 && checkWord(current_guess)) {
             playSound("send");
-            if (current_guess.length >= 6) {
-                colorFade("header", "text", PRESSURE[6].substring(1), "FFFFFF", 25, 60);
+            if (current_guess.length == 6) {
+                colorFade("header", "text", "5ccdc9", "FFFFFF", 25, 60);
+            } if (current_guess.length == 7) {
+                colorFade("bg", "background", "5ccdc9", "FFFFFF", 25, 60);
             }
             var s = calculateScore(current_guess);
             score += s;
