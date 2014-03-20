@@ -124,6 +124,7 @@ form {
     width: 700px;
     margin: 0 auto;
     margin-top:50px;
+    margin-bottom:50px;
 }
 #header {
     text-shadow: 1px 1px 0px #555;
@@ -218,6 +219,7 @@ form {
 #credits {
     font-size:10pt;
     font-weight:normal;
+    margin-bottom:30px;
 }
 #donate {
     margin: 0;
