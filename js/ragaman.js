@@ -147,12 +147,14 @@ document.onkeydown = function(e) {
         pool += current_guess;
         current_guess = "";
         pressure(0);
-    } else if (key == BACKSPACE && dom_input.textContent.length > 0) {
+    } else if (key == BACKSPACE) {
         // delete
+        if(dom_input.textContent.length > 0) {
+            pool += current_guess.substr(current_guess.length-1);
+            current_guess = current_guess.substr(0,current_guess.length-1);
+            pressure(current_guess.length);
+        }
         e.preventDefault();
-        pool += current_guess.substr(current_guess.length-1);
-        current_guess = current_guess.substr(0,current_guess.length-1);
-        pressure(current_guess.length);
     } else if (key == SPACE) {
         // shuffle
         e.preventDefault();
