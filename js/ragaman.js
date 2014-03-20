@@ -184,6 +184,9 @@ function calculateScore(word) {
     for (var i = 0; i < word.length; i++) {
         sc += VALUES[word[i]];
     }
+    if (word.length == 7) {
+        sc += 30;
+    }
     return sc + word.length;
 }
 
