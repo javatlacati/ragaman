@@ -155,6 +155,10 @@ document.onkeydown = function(e) {
             pressure(current_guess.length);
         }
         e.preventDefault();
+        dom_pool.textContent = pool;
+        dom_input.textContent = current_guess;
+        dom_score.innerHTML = "Score: " + score + "<br>" + "Time left: " + timeleft;
+        return false;
     } else if (key == SPACE) {
         // shuffle
         e.preventDefault();
