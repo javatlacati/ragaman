@@ -117,7 +117,6 @@ form {
 	width: 100%;
 	float: left;
 	overflow: hidden;
-    min-height:400px;
 }
 #wrap {
     border-radius: 20px;
@@ -206,7 +205,7 @@ form {
     text-align:center;
     width: 100%;
     min-height:200px;
-    font-size:20pt;
+    font-size:14pt;
     margin-bottom:40px;
 }
 #allwords {

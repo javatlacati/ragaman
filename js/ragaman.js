@@ -1,6 +1,7 @@
 // sorry for the messy code
 
 // constants
+ROUND_LENGTH = 5;
 PRESSURE = ["#000000", "#003322", "#005544", "#008866", "#00aa88", "#00ddaa", "#00eebb"];
 SPACE = 32;
 ENTER = 13;
@@ -103,7 +104,7 @@ function init() {
     current_guess = "";
     score = 0;
     already_guessed = [];
-    timeleft = 60;
+    timeleft = ROUND_LENGTH;
     pool = get_pool();
     pool_left = pool;
     dom_pool.textContent = pool;
@@ -292,8 +293,8 @@ function build_score_table(sc, pos) {
         var tbl_score = document.createElement("td");
         var tbl_place = document.createElement("td");
         tbl_place.textContent = (i+1);
-        tbl_pool.textContent = sc[i][0];
-        tbl_score.textContent = sc[i][1];
+        tbl_pool.textContent = "Letters: " + sc[i][0];
+        tbl_score.textContent = sc[i][1] + " points";
         tr.appendChild(tbl_place);
         tr.appendChild(tbl_score);
         tr.appendChild(tbl_pool);
