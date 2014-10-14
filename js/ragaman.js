@@ -43,6 +43,8 @@ function Ragaman() {
         input: document.getElementById("inner-input"),
         score: document.getElementById("score"),
         pool: document.getElementById("current-pool"),
+        missed: document.getElementById("missed"),
+        missedContainer: document.getElementById("missed-container"),
         time: document.getElementById("time"),
         charScore: document.getElementById("char-score"),
         alreadyGuessed: document.getElementById("already-guessed"),
@@ -60,7 +62,8 @@ Ragaman.prototype.init = function() {
     this.poolLeft = this.pool;
     this.currentGuess = "";
     this.gameState = STATE_GAME_ON;
-    this.possibleWords = null;
+    this.possibleWords = [];
+    this.missedWords = [];
     this.timeLeft = ROUND_LENGTH;
     this.score = 0;
     this.scores = [];
@@ -98,9 +101,14 @@ Ragaman.prototype.second = function() {
         // game over
         // rebuild pool in case stuff was entered already
         this.pool += this.currentGuess;
+
         clearInterval(this.timer);
         this.dom.main.style.display = "none";
         this.dom.scores.style.display = "block";
+
+        this.getPossibleWords(this.pool);
+        this.getMissedWords();
+        console.log(this.missedWords);
         if (this.scores != null) {
             // add highscore if relevant
             var i = 0;
@@ -155,10 +163,7 @@ Ragaman.prototype.handleKey = function(e) {
             var s = this.calculateScore(this.currentGuess);
             this.score += s;
             this.alreadyGuessed.push(this.currentGuess);
-            var guessSpan = document.createElement("span");
-            guessSpan.innerHTML += this.currentGuess + "<sup>" + s + "</sup> ";
-            guessSpan.style.color = PRESSURE[this.currentGuess.length-1];
-            this.dom.alreadyGuessed.appendChild(guessSpan);
+            this.dom.alreadyGuessed.appendChild(this.getWordNode(this.currentGuess, s));
         }
         this.pool += this.currentGuess;
         this.currentGuess = "";
@@ -193,6 +198,12 @@ Ragaman.prototype.handleKey = function(e) {
     this.dom.score.innerHTML = "Score: " + this.score + "<br>" + "Time left: " + this.timeLeft;
 }
 
+Ragaman.prototype.getWordNode = function(word, score) {
+    var guessSpan = document.createElement("span");
+    guessSpan.innerHTML += word + "<sup>" + score + "</sup> ";
+    guessSpan.style.color = PRESSURE[word.length-1];
+    return guessSpan;
+}
 
 Ragaman.prototype.checkWord = function(word) {
     return ALL_WORDS.indexOf(word) != -1;
@@ -206,16 +217,29 @@ Ragaman.prototype.calculateScore = function(word) {
     return sc + word.length;
 }
 
+Ragaman.prototype.getPossibleWords = function(pool) {
+    pool = pool.split("").sort().join("");
+    for (var i = 0; i < SORTED_WORDS.length; i++) {
+        if (pool.indexOf(SORTED_WORDS[i][0]) !== -1) {
+            this.possibleWords.push(ALL_WORDS[SORTED_WORDS[i][1]]);
+        }
+    }
+}
+
+Ragaman.prototype.getMissedWords = function() {
+    for (var i = 0; i < this.possibleWords.length; i++) {
+        if (this.alreadyGuessed.indexOf(this.possibleWords[i]) === -1) {
+            this.missedWords.push(this.possibleWords[i]);
+        }
+    }
+}
+
 Ragaman.prototype.pressure = function(level) {
     this.dom.input.style.color = PRESSURE[level];
 }
 
 Ragaman.prototype.buildScoreTable = function(sc, pos) {
-    this.dom.scores.innerHTML = "<h1>"
-    if (pos < 10) {
-        this.dom.scores.innerHTML += "<b>New Highscore!</b> ";
-    }
-    this.dom.scores.innerHTML += "Your Highscores:</h1>";
+    this.dom.scores.innerHTML = "<h1>Your Highscores:</h1>";
     var tbl = document.createElement("table");
     for (var i = 0; i < sc.length; i++) {
         var tr = document.createElement("tr");
@@ -236,7 +260,13 @@ Ragaman.prototype.buildScoreTable = function(sc, pos) {
         tbl.appendChild(tr);
     }
     this.dom.scores.appendChild(tbl);
-    this.dom.scores.innerHTML += "Press space to start a new game.";
+
+    // display missed words
+    for (var i = 0; i < this.missedWords.length; i++) {
+        this.dom.missed.appendChild(this.getWordNode(
+            this.missedWords[i], this.calculateScore(this.missedWords[i])));
+    }
+    this.dom.missedContainer.style.display = "block";
 }
 
 Ragaman.prototype.loadScores = function() {
@@ -266,17 +296,32 @@ Ragaman.prototype.saveScores = function() {
 
 window.onload = function() {
     ALL_WORDS = [];
+    SORTED_WORDS = [];
     var game = null;
 
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4) {
-            ALL_WORDS = xhr.responseText.split("\n");
+    // get words
+    var wordsR = new XMLHttpRequest();
+    wordsR.onreadystatechange = function() {
+        if (wordsR.readyState == 4) {
+            ALL_WORDS = wordsR.responseText.split("\n");
             game = new Ragaman();
         }
     }
-    xhr.open('GET', 'dicts/english.txt', true);
-    xhr.send(null);
+    wordsR.open('GET', 'dicts/english.txt', true);
+    wordsR.send(null);
+    
+    // get sorted words
+    var sortedR = new XMLHttpRequest();
+    sortedR.onreadystatechange = function() {
+        if (sortedR.readyState == 4) {
+            SORTED_WORDS = sortedR.responseText.split("\n");
+            for (var i = 0; i < SORTED_WORDS.length - 1; i++) {
+                SORTED_WORDS[i] = SORTED_WORDS[i].split(",");
+            }
+        }
+    }
+    sortedR.open('GET', 'dicts/english_sorted.txt', true);
+    sortedR.send(null);
 
     soundOn = true;
     var domSound = document.getElementById("sound");
