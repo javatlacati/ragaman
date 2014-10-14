@@ -137,8 +137,9 @@ Ragaman.prototype.handleKey = function(e) {
     if (this.gameState == STATE_GAME_OVER) {
         if (key == SPACE || key == TAB) {
             e.preventDefault();
-            document.getElementById("main").style.display = "block";
-            document.getElementById("scores").style.display = "none";
+            this.dom.main.style.display = "block";
+            this.dom.scores.style.display = "none";
+            this.dom.missedContainer.style.display = "none";
             this.init();
         } else {
             return;
@@ -262,6 +263,9 @@ Ragaman.prototype.buildScoreTable = function(sc, pos) {
     this.dom.scores.appendChild(tbl);
 
     // display missed words
+    if (this.missedWords.length == 0) {
+        this.dom.missed.innerHTML = "None! Wow, you should consider a professional Scrabble career.";
+    }
     for (var i = 0; i < this.missedWords.length; i++) {
         this.dom.missed.appendChild(this.getWordNode(
             this.missedWords[i], this.calculateScore(this.missedWords[i])));
