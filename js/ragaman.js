@@ -5,7 +5,7 @@ SPACE = 32;
 ENTER = 13;
 BACKSPACE = 8;
 TAB = 9;
-VALUES = {
+VALUES_ENGLISH = {
     "a": 1,
     "b": 3,
     "c": 3,
@@ -33,6 +33,37 @@ VALUES = {
     "y": 4,
     "z": 10
 };
+VALUES_GERMAN = {
+    "a": 1,
+    "b": 3,
+    "c": 4,
+    "d": 1,
+    "e": 1,
+    "f": 4,
+    "g": 2,
+    "h": 4,
+    "i": 1,
+    "j": 6,
+    "k": 4,
+    "l": 2,
+    "m": 3,
+    "n": 1,
+    "o": 2,
+    "p": 4,
+    "q": 10,
+    "r": 1,
+    "s": 1,
+    "t": 1,
+    "u": 1,
+    "v": 6,
+    "w": 3,
+    "x": 8,
+    "y": 10,
+    "z": 3,
+    "ö": 8,
+    "ä": 6,
+    "ü": 6,
+};
 STATE_GAME_ON = 0;
 STATE_GAME_OVER = 1;
 
@@ -52,10 +83,16 @@ function Ragaman() {
         soundoff: document.getElementById("mute"),
         soundon: document.getElementById("high")
     };
+    this.lang = "english";
     this.init();
 }
 
 Ragaman.prototype.init = function() {
+    if (this.lang == "english") {
+        this.values = VALUES_ENGLISH;
+    } else if (this.lang = "german") {
+        this.values = VALUES_GERMAN;
+    }
     this.alreadyGuessed = [];
     this.pool = "";
     this.setRandomPool();
@@ -188,7 +225,7 @@ Ragaman.prototype.handleKey = function(e) {
             // input
             soundOn && playSound("type");
             this.pressure(this.currentGuess.length);
-            this.dom.charScore.innerHTML = "+" + (VALUES[character]+1);
+            this.dom.charScore.innerHTML = "+" + (this.values[character]+1);
             colorFade("char-score", "text", "888888", "FFFFFF", 25, 40);
             this.currentGuess += character;
             this.pool = this.pool.substring(0,index) + this.pool.substring(1+index);
@@ -213,7 +250,7 @@ Ragaman.prototype.checkWord = function(word) {
 Ragaman.prototype.calculateScore = function(word) {
     var sc = 0;
     for (var i = 0; i < word.length; i++) {
-        sc += VALUES[word[i]];
+        sc += this.values[word[i]];
     }
     return sc + word.length;
 }
@@ -298,12 +335,10 @@ Ragaman.prototype.saveScores = function() {
     }
 }
 
-window.onload = function() {
+function getDict(language) {
+    // get words
     ALL_WORDS = [];
     SORTED_WORDS = [];
-    var game = null;
-
-    // get words
     var wordsR = new XMLHttpRequest();
     wordsR.onreadystatechange = function() {
         if (wordsR.readyState == 4) {
@@ -311,7 +346,7 @@ window.onload = function() {
             game = new Ragaman();
         }
     }
-    wordsR.open('GET', 'dicts/english.txt', true);
+    wordsR.open('GET', 'dicts/' + language + '.txt', true);
     wordsR.send(null);
     
     // get sorted words
@@ -324,9 +359,15 @@ window.onload = function() {
             }
         }
     }
-    sortedR.open('GET', 'dicts/english_sorted.txt', true);
+    sortedR.open('GET', 'dicts/' + language + '_sorted.txt', true);
     sortedR.send(null);
+}
 
+window.onload = function() {
+    ALL_WORDS = [];
+    SORTED_WORDS = [];
+    game = null;
+    getDict("english");
     soundOn = true;
     var domSound = document.getElementById("sound");
     var domSoundoff = document.getElementById("mute");
