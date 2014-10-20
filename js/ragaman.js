@@ -1,5 +1,5 @@
 // constants
-ROUND_LENGTH = 60;
+ROUND_LENGTH = 5;
 PRESSURE = ["#000000", "#003322", "#005544", "#008866", "#00aa88", "#00ddaa", "#00eebb"];
 SPACE = 32;
 ENTER = 13;
@@ -73,6 +73,7 @@ Ragaman.prototype.init = function() {
     this.dom.alreadyGuessed.textContent = "";
     this.dom.pool.textContent = this.pool;
     this.dom.input.textContent = "";
+    this.dom.missed.textContent = "";
 
     this.pressure(0);
     if (this.timer != null) {
