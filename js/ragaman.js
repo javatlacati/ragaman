@@ -109,7 +109,6 @@ Ragaman.prototype.second = function() {
 
         this.getPossibleWords(this.pool);
         this.getMissedWords();
-        console.log(this.missedWords);
         if (this.scores != null) {
             // add highscore if relevant
             var i = 0;
