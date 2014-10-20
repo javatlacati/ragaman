@@ -1,5 +1,5 @@
 // constants
-ROUND_LENGTH = 5;
+ROUND_LENGTH = 60;
 PRESSURE = ["#000000", "#003322", "#005544", "#008866", "#00aa88", "#00ddaa", "#00eebb"];
 SPACE = 32;
 ENTER = 13;
