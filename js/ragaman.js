@@ -90,7 +90,7 @@ function Ragaman() {
 Ragaman.prototype.init = function() {
     if (this.lang == "english") {
         this.values = VALUES_ENGLISH;
-    } else if (this.lang = "german") {
+    } else if (this.lang == "german") {
         this.values = VALUES_GERMAN;
     }
     this.alreadyGuessed = [];
