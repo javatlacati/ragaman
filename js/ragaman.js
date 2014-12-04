@@ -237,10 +237,22 @@ Ragaman.prototype.handleKey = function(e) {
 }
 
 Ragaman.prototype.getWordNode = function(word, score) {
+    /*var guessSpan = document.createElement("span");*/
+    /*guessSpan.innerHTML += "<a target=\"_blank\" href=\"" +*/
+    /*"http://dictionary.reference.com/browse/" + word + "?s=t\">" +*/
+    /*word + "</a><sup>" + score + "</sup> ";*/
+    /*guessSpan.style.color = PRESSURE[word.length-1];*/
+    /*return guessSpan;*/
+
     var guessSpan = document.createElement("span");
     guessSpan.innerHTML += word + "<sup>" + score + "</sup> ";
     guessSpan.style.color = PRESSURE[word.length-1];
-    return guessSpan;
+    var a = document.createElement("a");
+    a.target = "_blank";
+    a.alt = "Look up " + word + " in the dictionary";
+    a.href = "http://dictionary.reference.com/browse/" + word + "?s=t";
+    a.appendChild(guessSpan);
+    return a;
 }
 
 Ragaman.prototype.checkWord = function(word) {

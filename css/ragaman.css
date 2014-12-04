@@ -36,7 +36,14 @@ html {
 	top:0;
 }
 a {
-    color: #999;
+    color: #888;
+}
+#missed a, #already-guessed a {
+    color: none;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
 }
 body {
     background-color:#fff;
@@ -126,7 +133,7 @@ form {
     margin-bottom: 30px;
 }
 #wrap {
-    border-radius: 20px;
+    border-radius: 10px;
     width: 700px;
     margin: 0 auto;
     margin-top:50px;
@@ -164,7 +171,7 @@ form {
     margin-top:30px;
     margin-bottom:30px;
     width:100%;
-    border-radius: 10px;
+    border-radius: 7px;
 
 }
 #main {
@@ -173,7 +180,7 @@ form {
 }
 .score-box {
     font-weight: bold;
-    border-radius: 10px;
+    border-radius: 7px;
     min-height:30px;
     background-color:#eee;
     width: 94%;
@@ -206,7 +213,7 @@ form {
     height:100%;
     float:left;
     background-color:#eee;
-    border-radius: 10px;
+    border-radius: 7px;
     font-size:64pt;
     font-weight: bold;
 }
@@ -215,7 +222,7 @@ form {
     float:left;
     width:30%;
     height:100%;
-    border-radius: 10px;
+    border-radius: 7px;
     color:#aaa;
 }
 #scores {
