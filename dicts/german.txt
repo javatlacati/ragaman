@@ -12792,7 +12792,6 @@ zünfte
 zünften
 zürich
 zürichs
-a
 aal
 aale
 aalen
@@ -14161,7 +14160,6 @@ aß
 aßen
 aßest
 aßt
-b
 back
 backe
 backen
@@ -15571,7 +15569,6 @@ coolen
 cooler
 cooles
 cum
-d
 db
 da
 dabei
@@ -16130,7 +16127,6 @@ dürsten
 dürstet
 düster
 düstere
-e
 ebay
 ebays
 ebben
@@ -17948,7 +17944,6 @@ füttere
 füttern
 füttert
 füttre
-g
 ggmbh
 gab
 gabele
@@ -19844,7 +19839,6 @@ hütet
 hütete
 hüteten
 hütetet
-i
 ich
 ideal
 ideale
@@ -20014,7 +20008,6 @@ iss
 isst
 ist
 italic
-j
 ja
 jage
 jagen
@@ -20141,7 +20134,6 @@ jünger
 jüngere
 jüngst
 jüngste
-k
 khz
 kohm
 kw
@@ -21135,7 +21127,6 @@ küsst
 küsste
 küssten
 küsstet
-l
 labe
 laben
 labend
@@ -21882,7 +21873,6 @@ lümmeln
 lümmelt
 lümmle
 lüstern
-m
 ma
 mach
 machbar
@@ -24298,7 +24288,6 @@ rüttele
 rütteln
 rüttelt
 rüttle
-s
 sabbere
 sabbern
 sabbert
@@ -26906,7 +26895,6 @@ uriges
 urteile
 urteilt
 usw
-v
 vag
 vage
 vagem
@@ -27300,7 +27288,6 @@ vögelte
 vögle
 völlig
 völlige
-w
 wabblig
 wach
 wache
@@ -28962,7 +28949,6 @@ zürntet
 überzug
 übung
 übungen
-ä
 ächte
 ächten
 ächtend
