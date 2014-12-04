@@ -110,7 +110,6 @@ form {
     padding: 0;
     margin: 0;
 }
-
 #sound {
     position: absolute;
     top:20px;
@@ -235,6 +234,13 @@ form {
 }
 #allwords {
     display:none;
+}
+#display-all {
+    cursor: pointer;
+    font-size: 15pt;
+    font-weight:normal;
+    color: #999;
+    margin-left: 10px;
 }
 #tweet-divide {
     margin-top:30px;

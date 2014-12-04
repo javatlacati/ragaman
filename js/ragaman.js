@@ -262,8 +262,24 @@ Ragaman.prototype.calculateScore = function(word) {
 
 Ragaman.prototype.getPossibleWords = function(pool) {
     pool = pool.split("").sort().join("");
+    var match;
+    var initialPool = pool;
+    var index;
     for (var i = 0; i < SORTED_WORDS.length; i++) {
-        if (pool.indexOf(SORTED_WORDS[i][0]) !== -1) {
+        match = true;
+        pool = initialPool;
+        // look through word, remove each character from pool
+        // if a char is not found, this is not a match
+        for (var ci = 0; ci < SORTED_WORDS[i][0].length; ci++) {
+            index = pool.indexOf(SORTED_WORDS[i][0][ci]);
+            if (index === -1) {
+                match = false;
+                break;
+            } else {
+                pool = pool.slice(0, index) + pool.slice(index+1);
+            }
+        }
+        if (match) {
             this.possibleWords.push(ALL_WORDS[SORTED_WORDS[i][1]]);
         }
     }
@@ -313,10 +329,20 @@ Ragaman.prototype.buildScoreTable = function(sc, pos) {
         this.dom.missed.innerHTML = "None! Wow, you should consider a professional Scrabble career.";
     }
     for (var i = 0; i < this.missedWords.length; i++) {
-        this.dom.missed.appendChild(this.getWordNode(
-            this.missedWords[i], this.calculateScore(this.missedWords[i])));
+        var node = this.getWordNode(this.missedWords[i], this.calculateScore(this.missedWords[i]));
+        if (i > 15) {
+            node.style.display = "none";
+        }
+        this.dom.missed.appendChild(node);
     }
     this.dom.missedContainer.style.display = "block";
+}
+
+Ragaman.prototype.viewAllWords = function() {
+    var children = this.dom.missed.children;
+    for (var i = 0; i < children.length; i++) {
+        children[i].style.display = "inline";
+    }
 }
 
 Ragaman.prototype.loadScores = function() {
@@ -366,6 +392,8 @@ function getDict(language) {
             for (var i = 0; i < SORTED_WORDS.length - 1; i++) {
                 SORTED_WORDS[i] = SORTED_WORDS[i].split(",");
             }
+            // remove last newline
+            SORTED_WORDS.splice(SORTED_WORDS.length-1, 1);
         }
     }
     sortedR.open('GET', 'dicts/' + language + '_sorted.txt', true);
@@ -395,6 +423,9 @@ window.onload = function() {
             localStorage["sound"] = "true";
         }
     };
+    document.getElementById("display-all").onclick = function() {
+        game.viewAllWords();
+    }
     if (localStorage["sound"] == "false") {
         domSound.onclick();
     }
