@@ -237,13 +237,6 @@ Ragaman.prototype.handleKey = function(e) {
 }
 
 Ragaman.prototype.getWordNode = function(word, score) {
-    /*var guessSpan = document.createElement("span");*/
-    /*guessSpan.innerHTML += "<a target=\"_blank\" href=\"" +*/
-    /*"http://dictionary.reference.com/browse/" + word + "?s=t\">" +*/
-    /*word + "</a><sup>" + score + "</sup> ";*/
-    /*guessSpan.style.color = PRESSURE[word.length-1];*/
-    /*return guessSpan;*/
-
     var guessSpan = document.createElement("span");
     guessSpan.innerHTML += word + "<sup>" + score + "</sup> ";
     guessSpan.style.color = PRESSURE[word.length-1];
@@ -282,6 +275,10 @@ Ragaman.prototype.getMissedWords = function() {
             this.missedWords.push(this.possibleWords[i]);
         }
     }
+    this.missedWords.sort(function(w1, w2) {
+        return w1.length == w2.length ? 0 :
+            w1.length > w2.length ? -1 : 1;
+    });
 }
 
 Ragaman.prototype.pressure = function(level) {
