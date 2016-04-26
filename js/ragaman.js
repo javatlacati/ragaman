@@ -1,6 +1,5 @@
-// constants
 ROUND_LENGTH = 60;
-PRESSURE = ["#000000", "#003322", "#005544", "#008866", "#00aa88", "#00ddaa", "#00eebb"];
+PRESSURE = ["#002211", "#003322", "#005544", "#008866", "#00aa88", "#00ddaa", "#33eebb"].reverse();
 SPACE = 32;
 ENTER = 13;
 BACKSPACE = 8;
@@ -77,6 +76,7 @@ function Ragaman() {
         missed: document.getElementById("missed"),
         missedContainer: document.getElementById("missed-container"),
         time: document.getElementById("time"),
+        timebar: document.getElementById("timebar"),
         charScore: document.getElementById("char-score"),
         alreadyGuessed: document.getElementById("already-guessed"),
         sound: document.getElementById("sound"),
@@ -166,6 +166,8 @@ Ragaman.prototype.second = function() {
     } else {
         this.timeLeft--;
         this.dom.score.innerHTML = "Score: " + this.score + "<br>" + "Time left: " + this.timeLeft;
+        this.dom.timebar.style.width = (this.timeLeft / 0.6) + "%";
+
     }
 }
 
@@ -242,7 +244,7 @@ Ragaman.prototype.getWordNode = function(word, score) {
     guessSpan.style.color = PRESSURE[word.length-1];
     var a = document.createElement("a");
     a.target = "_blank";
-    a.alt = "Look up " + word + " in the dictionary";
+    a.title = "Look up " + word + " in the dictionary";
     a.href = "http://dictionary.reference.com/browse/" + word + "?s=t";
     a.appendChild(guessSpan);
     return a;
