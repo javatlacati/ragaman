@@ -32,6 +32,35 @@ VALUES_ENGLISH = {
     "y": 4,
     "z": 10
 };
+VALUES_SPANISH = {
+    "a": 1,
+    "b": 2,
+    "c": 2,
+    "d": 2,
+    "e": 1,
+    "f": 3,
+    "g": 2,
+    "h": 4,
+    "i": 1,
+    "j": 8,
+    "k": 5,
+    "l": 1,
+    "m": 3,
+    "n": 1,
+    "ñ": 7,
+    "o": 1,
+    "p": 3,
+    "q": 10,
+    "r": 1,
+    "s": 1,
+    "t": 1,
+    "u": 1,
+    "v": 4,
+    "w": 5,
+    "x": 8,
+    "y": 4,
+    "z": 10
+};
 VALUES_GERMAN = {
     "a": 1,
     "b": 3,
@@ -84,7 +113,7 @@ function Ragaman() {
         soundoff: document.getElementById("mute"),
         soundon: document.getElementById("high")
     };
-    this.lang = "english";
+    this.lang = "spanish";
     this.init();
 }
 
@@ -93,6 +122,8 @@ Ragaman.prototype.init = function() {
         this.values = VALUES_ENGLISH;
     } else if (this.lang === "german") {
         this.values = VALUES_GERMAN;
+    } else if(this.lang === "spanish"){
+        this.values = VALUES_SPANISH;
     }
     this.alreadyGuessed = [];
     this.pool = "";
@@ -127,9 +158,10 @@ Ragaman.prototype.init = function() {
 };
 
 Ragaman.prototype.setRandomPool = function() {
-    // get random 7 letter word from dict and scramble it
+    // get random word from dict with at least numberOfLetters and scramble it
     var pl = "";
-    while (pl.length !== 7) {
+    var numberOfLetters = 7;
+    while (pl.length < numberOfLetters) {
         pl = ALL_WORDS[Math.floor(Math.random()*ALL_WORDS.length)];
     }
     this.pool = pl.shuffle();
@@ -242,11 +274,17 @@ Ragaman.prototype.handleKey = function(e) {
 Ragaman.prototype.getWordNode = function(word, score) {
     var guessSpan = document.createElement("span");
     guessSpan.innerHTML += word + "<sup>" + score + "</sup> ";
+    if(word)
     guessSpan.style.color = PRESSURE[word.length-1];
     var a = document.createElement("a");
     a.target = "_blank";
+    if(word)
     a.title = "Look up " + word + " in the dictionary";
-    a.href = "http://dictionary.reference.com/browse/" + word + "?s=t";
+    if (this.lang === "english") {
+        a.href = "http://dictionary.reference.com/browse/" + word + "?s=t";
+    } else if (this.lang === "spanish") {
+        a.href = "http://dle.rae.es/?w=" + word;
+    }
     a.appendChild(guessSpan);
     return a;
 };
@@ -257,11 +295,16 @@ Ragaman.prototype.checkWord = function(word) {
 
 Ragaman.prototype.calculateScore = function(word) {
     var sc = 0;
-    for (var i = 0; i < word.length; i++) {
-        sc += this.values[word[i]];
+    if(word){
+        var length = word.length;
+        for (var i = 0; i < length; i++) {
+            sc += this.values[word[i]];
+        }
+        return sc + length;
+    }else{
+        return sc;
     }
-    return sc + word.length;
-}
+};
 
 Ragaman.prototype.getPossibleWords = function(pool) {
     pool = pool.split("").sort().join("");
@@ -274,6 +317,7 @@ Ragaman.prototype.getPossibleWords = function(pool) {
         // look through word, remove each character from pool
         // if a char is not found, this is not a match
         for (var ci = 0; ci < SORTED_WORDS[i][0].length; ci++) {
+            console.log("SORTED_WORDS["+i+"][0]["+ci+"]="+SORTED_WORDS[i][0][ci]);
             index = pool.indexOf(SORTED_WORDS[i][0][ci]);
             if (index === -1) {
                 match = false;
@@ -289,6 +333,7 @@ Ragaman.prototype.getPossibleWords = function(pool) {
 };
 
 Ragaman.prototype.getMissedWords = function() {
+    console.log("possibleWords:"+this.possibleWords);
     for (var i = 0; i < this.possibleWords.length; i++) {
         if (this.alreadyGuessed.indexOf(this.possibleWords[i]) === -1) {
             this.missedWords.push(this.possibleWords[i]);
@@ -407,7 +452,7 @@ window.onload = function() {
     ALL_WORDS = [];
     SORTED_WORDS = [];
     game = null;
-    getDict("english");
+    getDict(this.lang);
     soundOn = true;
     var domSound = document.getElementById("sound");
     var domSoundoff = document.getElementById("mute");
