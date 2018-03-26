@@ -1,8 +1,8 @@
 CHANNEL_MAX = 4;
-audiochannels = new Array();
+audiochannels = [];
 
 for (i = 0; i < CHANNEL_MAX; i++) {
-	audiochannels[i] = new Array();
+	audiochannels[i] = [];
 	audiochannels[i]['channel'] = new Audio();
 	audiochannels[i]['finished'] = -1;
 }

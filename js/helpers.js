@@ -17,5 +17,5 @@ String.prototype.shuffle = function () {
         a[j] = tmp;
     }
     return a.join("");
-}
+};
 

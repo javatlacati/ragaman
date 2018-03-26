@@ -61,7 +61,8 @@ VALUES_GERMAN = {
     "z": 3,
     "ö": 8,
     "ä": 6,
-    "ü": 6,
+    "ü": 6
+    // "ß": 4
 };
 STATE_GAME_ON = 0;
 STATE_GAME_OVER = 1;
@@ -88,9 +89,9 @@ function Ragaman() {
 }
 
 Ragaman.prototype.init = function() {
-    if (this.lang == "english") {
+    if (this.lang === "english") {
         this.values = VALUES_ENGLISH;
-    } else if (this.lang == "german") {
+    } else if (this.lang === "german") {
         this.values = VALUES_GERMAN;
     }
     this.alreadyGuessed = [];
@@ -123,19 +124,19 @@ Ragaman.prototype.init = function() {
     }
     this.second();
     this.timer = window.setInterval(function() {callSecond();}, 1000);
-}
+};
 
 Ragaman.prototype.setRandomPool = function() {
     // get random 7 letter word from dict and scramble it
     var pl = "";
-    while (pl.length != 7) {
+    while (pl.length !== 7) {
         pl = ALL_WORDS[Math.floor(Math.random()*ALL_WORDS.length)];
     }
     this.pool = pl.shuffle();
-}
+};
 
 Ragaman.prototype.second = function() {
-    if (this.timeLeft == 0) {
+    if (this.timeLeft === 0) {
         // game over
         // rebuild pool in case stuff was entered already
         this.pool += this.currentGuess;
@@ -169,12 +170,12 @@ Ragaman.prototype.second = function() {
         this.dom.timebar.style.width = (this.timeLeft / 0.6) + "%";
 
     }
-}
+};
 
 Ragaman.prototype.handleKey = function(e) {
     var key = e.keyCode;
-    if (this.gameState == STATE_GAME_OVER) {
-        if (key == SPACE || key == TAB) {
+    if (this.gameState === STATE_GAME_OVER) {
+        if (key === SPACE || key === TAB) {
             e.preventDefault();
             this.dom.main.style.display = "block";
             this.dom.scores.style.display = "none";
@@ -184,20 +185,20 @@ Ragaman.prototype.handleKey = function(e) {
             return;
         }
         return;
-    } if (key == TAB) {
+    } if (key === TAB) {
         e.preventDefault();
         this.init();
     }
     this.currentGuess = this.dom.input.textContent.toLowerCase();
-    if (key == ENTER) {
+    if (key === ENTER) {
         // submit
         if (this.alreadyGuessed.indexOf(this.currentGuess) === -1 && 
                 this.currentGuess.length > 0 && 
                 this.checkWord(this.currentGuess)) {
             soundOn && playSound("send");
-            if (this.currentGuess.length == 6) {
+            if (this.currentGuess.length === 6) {
                 colorFade("header", "text", PRESSURE[6].substring(1), "FFFFFF", 25, 60);
-            } if (this.currentGuess.length == 7) {
+            } if (this.currentGuess.length === 7) {
                 colorFade("bg", "background", PRESSURE[6].substring(1), "FFFFFF", 25, 60);
             }
             var s = this.calculateScore(this.currentGuess);
@@ -208,7 +209,7 @@ Ragaman.prototype.handleKey = function(e) {
         this.pool += this.currentGuess;
         this.currentGuess = "";
         this.pressure(0);
-    } else if (key == BACKSPACE) {
+    } else if (key === BACKSPACE) {
         e.preventDefault();
         if (this.dom.input.textContent.length > 0) {
             // delete
@@ -216,14 +217,14 @@ Ragaman.prototype.handleKey = function(e) {
             this.currentGuess = this.currentGuess.substr(0, this.currentGuess.length-1);
             this.pressure(this.currentGuess.length);
         }
-    } else if (key == SPACE) {
+    } else if (key === SPACE) {
         // shuffle
         e.preventDefault();
         this.pool = this.pool.shuffle();
     } else {
         var character = String.fromCharCode(e.keyCode).toLowerCase();
         var index = this.pool.indexOf(character);
-        if (index != -1) {
+        if (index !== -1) {
             // input
             soundOn && playSound("type");
             this.pressure(this.currentGuess.length);
@@ -236,7 +237,7 @@ Ragaman.prototype.handleKey = function(e) {
     this.dom.pool.textContent = this.pool;
     this.dom.input.textContent = this.currentGuess;
     this.dom.score.innerHTML = "Score: " + this.score + "<br>" + "Time left: " + this.timeLeft;
-}
+};
 
 Ragaman.prototype.getWordNode = function(word, score) {
     var guessSpan = document.createElement("span");
@@ -248,11 +249,11 @@ Ragaman.prototype.getWordNode = function(word, score) {
     a.href = "http://dictionary.reference.com/browse/" + word + "?s=t";
     a.appendChild(guessSpan);
     return a;
-}
+};
 
 Ragaman.prototype.checkWord = function(word) {
-    return ALL_WORDS.indexOf(word) != -1;
-}
+    return ALL_WORDS.indexOf(word) !== -1;
+};
 
 Ragaman.prototype.calculateScore = function(word) {
     var sc = 0;
@@ -285,7 +286,7 @@ Ragaman.prototype.getPossibleWords = function(pool) {
             this.possibleWords.push(ALL_WORDS[SORTED_WORDS[i][1]]);
         }
     }
-}
+};
 
 Ragaman.prototype.getMissedWords = function() {
     for (var i = 0; i < this.possibleWords.length; i++) {
@@ -294,14 +295,14 @@ Ragaman.prototype.getMissedWords = function() {
         }
     }
     this.missedWords.sort(function(w1, w2) {
-        return w1.length == w2.length ? 0 :
+        return w1.length === w2.length ? 0 :
             w1.length > w2.length ? -1 : 1;
     });
-}
+};
 
 Ragaman.prototype.pressure = function(level) {
     this.dom.input.style.color = PRESSURE[level];
-}
+};
 
 Ragaman.prototype.buildScoreTable = function(sc, pos) {
     this.dom.scores.innerHTML = "<h1>Your Highscores:</h1>";
@@ -318,7 +319,7 @@ Ragaman.prototype.buildScoreTable = function(sc, pos) {
         tr.appendChild(tblPlace);
         tr.appendChild(tblPool);
         tr.appendChild(tblScore);
-        if (i == pos) {
+        if (i === pos) {
             tr.style.color = PRESSURE[6];
             tr.style.fontWeight = "bold";
         }
@@ -327,7 +328,7 @@ Ragaman.prototype.buildScoreTable = function(sc, pos) {
     this.dom.scores.appendChild(tbl);
 
     // display missed words
-    if (this.missedWords.length == 0) {
+    if (this.missedWords.length === 0) {
         this.dom.missed.innerHTML = "None! Wow, you should consider a professional Scrabble career.";
     }
     for (var i = 0; i < this.missedWords.length; i++) {
@@ -338,18 +339,18 @@ Ragaman.prototype.buildScoreTable = function(sc, pos) {
         this.dom.missed.appendChild(node);
     }
     this.dom.missedContainer.style.display = "block";
-}
+};
 
 Ragaman.prototype.viewAllWords = function() {
     var children = this.dom.missed.children;
     for (var i = 0; i < children.length; i++) {
         children[i].style.display = "inline";
     }
-}
+};
 
 Ragaman.prototype.loadScores = function() {
     if (supports_html5_storage()) {
-        if (localStorage["hasscores"] == "true") {
+        if (localStorage["hasscores"] === "true") {
             for (var i = 0; i < 10; i++) {
                 if (localStorage["score_" + i] == null) {
                     break;
@@ -360,7 +361,7 @@ Ragaman.prototype.loadScores = function() {
             }
         }
     }
-}
+};
 
 Ragaman.prototype.saveScores = function() {
     if (supports_html5_storage()) {
@@ -370,7 +371,7 @@ Ragaman.prototype.saveScores = function() {
         }
         localStorage["hasscores"] = "true";
     }
-}
+};
 
 function getDict(language) {
     // get words
@@ -378,18 +379,18 @@ function getDict(language) {
     SORTED_WORDS = [];
     var wordsR = new XMLHttpRequest();
     wordsR.onreadystatechange = function() {
-        if (wordsR.readyState == 4) {
+        if (wordsR.readyState === 4) {
             ALL_WORDS = wordsR.responseText.split("\n");
             game = new Ragaman();
         }
-    }
+    };
     wordsR.open('GET', 'dicts/' + language + '.txt', true);
     wordsR.send(null);
     
     // get sorted words
     var sortedR = new XMLHttpRequest();
     sortedR.onreadystatechange = function() {
-        if (sortedR.readyState == 4) {
+        if (sortedR.readyState === 4) {
             SORTED_WORDS = sortedR.responseText.split("\n");
             for (var i = 0; i < SORTED_WORDS.length - 1; i++) {
                 SORTED_WORDS[i] = SORTED_WORDS[i].split(",");
@@ -397,7 +398,7 @@ function getDict(language) {
             // remove last newline
             SORTED_WORDS.splice(SORTED_WORDS.length-1, 1);
         }
-    }
+    };
     sortedR.open('GET', 'dicts/' + language + '_sorted.txt', true);
     sortedR.send(null);
 }
@@ -427,8 +428,8 @@ window.onload = function() {
     };
     document.getElementById("display-all").onclick = function() {
         game.viewAllWords();
-    }
-    if (localStorage["sound"] == "false") {
+    };
+    if (localStorage["sound"] === "false") {
         domSound.onclick();
     }
     document.onkeydown = function(e) {
