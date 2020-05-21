@@ -61,6 +61,25 @@ VALUES_SPANISH = {
     "y": 4,
     "z": 10
 };
+
+VALUES_TLAXCATLAXTOL = {
+    "a": 1,
+    "c": 4,
+    "e": 7,
+    "h": 6,
+    "i": 3,
+    "l": 1,
+    "m": 8,
+    "n": 7,
+    "o": 5,
+    "p": 8,
+    "q": 9,
+    "t": 2,
+    "u": 7,
+    "x": 9,
+    "y": 9,
+    "z": 8,
+};
 VALUES_GERMAN = {
     "a": 1,
     "b": 3,
@@ -117,13 +136,15 @@ function Ragaman() {
     this.init();
 }
 
-Ragaman.prototype.init = function() {
+Ragaman.prototype.init = function () {
     if (this.lang === "english") {
         this.values = VALUES_ENGLISH;
     } else if (this.lang === "german") {
         this.values = VALUES_GERMAN;
-    } else if(this.lang === "spanish"){
+    } else if (this.lang === "spanish") {
         this.values = VALUES_SPANISH;
+    } else if (this.lang === "tlaxcatlahtol") {
+        this.values = VALUES_TLAXCATLAXTOL;
     }
     this.alreadyGuessed = [];
     this.pool = "";
@@ -150,24 +171,28 @@ Ragaman.prototype.init = function() {
     }
 
     var myself = this;
+
     function callSecond() {
         myself.second();
     }
+
     this.second();
-    this.timer = window.setInterval(function() {callSecond();}, 1000);
+    this.timer = window.setInterval(function () {
+        callSecond();
+    }, 1000);
 };
 
-Ragaman.prototype.setRandomPool = function() {
+Ragaman.prototype.setRandomPool = function () {
     // get random word from dict with at least numberOfLetters and scramble it
     var pl = "";
     var numberOfLetters = 7;
     while (pl.length < numberOfLetters) {
-        pl = ALL_WORDS[Math.floor(Math.random()*ALL_WORDS.length)];
+        pl = ALL_WORDS[Math.floor(Math.random() * ALL_WORDS.length)];
     }
     this.pool = pl.shuffle();
 };
 
-Ragaman.prototype.second = function() {
+Ragaman.prototype.second = function () {
     if (this.timeLeft === 0) {
         // game over
         // rebuild pool in case stuff was entered already
@@ -204,7 +229,7 @@ Ragaman.prototype.second = function() {
     }
 };
 
-Ragaman.prototype.handleKey = function(e) {
+Ragaman.prototype.handleKey = function (e) {
     var key = e.keyCode;
     if (this.gameState === STATE_GAME_OVER) {
         if (key === SPACE || key === TAB) {
@@ -217,20 +242,22 @@ Ragaman.prototype.handleKey = function(e) {
             return;
         }
         return;
-    } if (key === TAB) {
+    }
+    if (key === TAB) {
         e.preventDefault();
         this.init();
     }
     this.currentGuess = this.dom.input.textContent.toLowerCase();
     if (key === ENTER) {
         // submit
-        if (this.alreadyGuessed.indexOf(this.currentGuess) === -1 && 
-                this.currentGuess.length > 0 && 
-                this.checkWord(this.currentGuess)) {
+        if (this.alreadyGuessed.indexOf(this.currentGuess) === -1 &&
+            this.currentGuess.length > 0 &&
+            this.checkWord(this.currentGuess)) {
             soundOn && playSound("send");
             if (this.currentGuess.length === 6) {
                 colorFade("header", "text", PRESSURE[6].substring(1), "FFFFFF", 25, 60);
-            } if (this.currentGuess.length === 7) {
+            }
+            if (this.currentGuess.length === 7) {
                 colorFade("bg", "background", PRESSURE[6].substring(1), "FFFFFF", 25, 60);
             }
             var s = this.calculateScore(this.currentGuess);
@@ -245,8 +272,8 @@ Ragaman.prototype.handleKey = function(e) {
         e.preventDefault();
         if (this.dom.input.textContent.length > 0) {
             // delete
-            this.pool += this.currentGuess.substr(this.currentGuess.length-1);
-            this.currentGuess = this.currentGuess.substr(0, this.currentGuess.length-1);
+            this.pool += this.currentGuess.substr(this.currentGuess.length - 1);
+            this.currentGuess = this.currentGuess.substr(0, this.currentGuess.length - 1);
             this.pressure(this.currentGuess.length);
         }
     } else if (key === SPACE) {
@@ -260,10 +287,10 @@ Ragaman.prototype.handleKey = function(e) {
             // input
             soundOn && playSound("type");
             this.pressure(this.currentGuess.length);
-            this.dom.charScore.innerHTML = "+" + (this.values[character]+1);
+            this.dom.charScore.innerHTML = "+" + (this.values[character] + 1);
             colorFade("char-score", "text", "888888", "FFFFFF", 25, 40);
             this.currentGuess += character;
-            this.pool = this.pool.substring(0,index) + this.pool.substring(1+index);
+            this.pool = this.pool.substring(0, index) + this.pool.substring(1 + index);
         }
     }
     this.dom.pool.textContent = this.pool;
@@ -271,15 +298,15 @@ Ragaman.prototype.handleKey = function(e) {
     this.dom.score.innerHTML = "Score: " + this.score + "<br>" + "Time left: " + this.timeLeft;
 };
 
-Ragaman.prototype.getWordNode = function(word, score) {
+Ragaman.prototype.getWordNode = function (word, score) {
     var guessSpan = document.createElement("span");
     guessSpan.innerHTML += word + "<sup>" + score + "</sup> ";
-    if(word)
-    guessSpan.style.color = PRESSURE[word.length-1];
+    if (word)
+        guessSpan.style.color = PRESSURE[word.length - 1];
     var a = document.createElement("a");
     a.target = "_blank";
-    if(word)
-    a.title = "Look up " + word + " in the dictionary";
+    if (word)
+        a.title = "Look up " + word + " in the dictionary";
     if (this.lang === "english") {
         a.href = "http://dictionary.reference.com/browse/" + word + "?s=t";
     } else if (this.lang === "spanish") {
@@ -289,24 +316,24 @@ Ragaman.prototype.getWordNode = function(word, score) {
     return a;
 };
 
-Ragaman.prototype.checkWord = function(word) {
+Ragaman.prototype.checkWord = function (word) {
     return ALL_WORDS.indexOf(word) !== -1;
 };
 
-Ragaman.prototype.calculateScore = function(word) {
+Ragaman.prototype.calculateScore = function (word) {
     var sc = 0;
-    if(word){
+    if (word) {
         var length = word.length;
         for (var i = 0; i < length; i++) {
             sc += this.values[word[i]];
         }
         return sc + length;
-    }else{
+    } else {
         return sc;
     }
 };
 
-Ragaman.prototype.getPossibleWords = function(pool) {
+Ragaman.prototype.getPossibleWords = function (pool) {
     pool = pool.split("").sort().join("");
     var match;
     var initialPool = pool;
@@ -317,13 +344,13 @@ Ragaman.prototype.getPossibleWords = function(pool) {
         // look through word, remove each character from pool
         // if a char is not found, this is not a match
         for (var ci = 0; ci < SORTED_WORDS[i][0].length; ci++) {
-            console.log("SORTED_WORDS["+i+"][0]["+ci+"]="+SORTED_WORDS[i][0][ci]);
+            console.log("SORTED_WORDS[" + i + "][0][" + ci + "]=" + SORTED_WORDS[i][0][ci]);
             index = pool.indexOf(SORTED_WORDS[i][0][ci]);
             if (index === -1) {
                 match = false;
                 break;
             } else {
-                pool = pool.slice(0, index) + pool.slice(index+1);
+                pool = pool.slice(0, index) + pool.slice(index + 1);
             }
         }
         if (match) {
@@ -332,24 +359,24 @@ Ragaman.prototype.getPossibleWords = function(pool) {
     }
 };
 
-Ragaman.prototype.getMissedWords = function() {
-    console.log("possibleWords:"+this.possibleWords);
+Ragaman.prototype.getMissedWords = function () {
+    console.log("possibleWords:" + this.possibleWords);
     for (var i = 0; i < this.possibleWords.length; i++) {
         if (this.alreadyGuessed.indexOf(this.possibleWords[i]) === -1) {
             this.missedWords.push(this.possibleWords[i]);
         }
     }
-    this.missedWords.sort(function(w1, w2) {
+    this.missedWords.sort(function (w1, w2) {
         return w1.length === w2.length ? 0 :
             w1.length > w2.length ? -1 : 1;
     });
 };
 
-Ragaman.prototype.pressure = function(level) {
+Ragaman.prototype.pressure = function (level) {
     this.dom.input.style.color = PRESSURE[level];
 };
 
-Ragaman.prototype.buildScoreTable = function(sc, pos) {
+Ragaman.prototype.buildScoreTable = function (sc, pos) {
     this.dom.scores.innerHTML = "<h1>Your Highscores:</h1>";
     var tbl = document.createElement("table");
     for (var i = 0; i < sc.length; i++) {
@@ -357,7 +384,7 @@ Ragaman.prototype.buildScoreTable = function(sc, pos) {
         var tblPool = document.createElement("td");
         var tblScore = document.createElement("td");
         var tblPlace = document.createElement("td");
-        tblPlace.textContent = "#" + (i+1) + ":";
+        tblPlace.textContent = "#" + (i + 1) + ":";
         tblPool.textContent = sc[i][0];
         tblPool.className = "pool";
         tblScore.textContent = sc[i][1] + " points";
@@ -386,14 +413,14 @@ Ragaman.prototype.buildScoreTable = function(sc, pos) {
     this.dom.missedContainer.style.display = "block";
 };
 
-Ragaman.prototype.viewAllWords = function() {
+Ragaman.prototype.viewAllWords = function () {
     var children = this.dom.missed.children;
     for (var i = 0; i < children.length; i++) {
         children[i].style.display = "inline";
     }
 };
 
-Ragaman.prototype.loadScores = function() {
+Ragaman.prototype.loadScores = function () {
     if (supports_html5_storage()) {
         if (localStorage["hasscores"] === "true") {
             for (var i = 0; i < 10; i++) {
@@ -408,7 +435,7 @@ Ragaman.prototype.loadScores = function() {
     }
 };
 
-Ragaman.prototype.saveScores = function() {
+Ragaman.prototype.saveScores = function () {
     if (supports_html5_storage()) {
         for (var i = 0; i < this.scores.length; i++) {
             localStorage["pool_" + i] = this.scores[i][0];
@@ -423,32 +450,37 @@ function getDict(language) {
     ALL_WORDS = [];
     SORTED_WORDS = [];
     var wordsR = new XMLHttpRequest();
-    wordsR.onreadystatechange = function() {
+    wordsR.onreadystatechange = function () {
         if (wordsR.readyState === 4) {
             ALL_WORDS = wordsR.responseText.split("\n");
             game = new Ragaman();
         }
     };
+    if (!language) {
+        //language="english"
+        language = "tlaxcatlahtol"
+        // language = "spanish"
+    }
     wordsR.open('GET', 'dicts/' + language + '.txt', true);
     wordsR.send(null);
-    
+
     // get sorted words
     var sortedR = new XMLHttpRequest();
-    sortedR.onreadystatechange = function() {
+    sortedR.onreadystatechange = function () {
         if (sortedR.readyState === 4) {
             SORTED_WORDS = sortedR.responseText.split("\n");
             for (var i = 0; i < SORTED_WORDS.length - 1; i++) {
                 SORTED_WORDS[i] = SORTED_WORDS[i].split(",");
             }
             // remove last newline
-            SORTED_WORDS.splice(SORTED_WORDS.length-1, 1);
+            SORTED_WORDS.splice(SORTED_WORDS.length - 1, 1);
         }
     };
     sortedR.open('GET', 'dicts/' + language + '_sorted.txt', true);
     sortedR.send(null);
 }
 
-window.onload = function() {
+window.onload = function () {
     ALL_WORDS = [];
     SORTED_WORDS = [];
     game = null;
@@ -457,27 +489,26 @@ window.onload = function() {
     var domSound = document.getElementById("sound");
     var domSoundoff = document.getElementById("mute");
     var domSoundon = document.getElementById("high");
-    domSound.onclick = function() {
+    domSound.onclick = function () {
         if (soundOn) {
             domSoundoff.style.display = "none";
             domSoundon.style.display = "block";
             soundOn = false;
             localStorage["sound"] = "false";
-        }
-        else {
+        } else {
             domSoundoff.style.display = "block";
             domSoundon.style.display = "none";
             soundOn = true;
             localStorage["sound"] = "true";
         }
     };
-    document.getElementById("display-all").onclick = function() {
+    document.getElementById("display-all").onclick = function () {
         game.viewAllWords();
     };
     if (localStorage["sound"] === "false") {
         domSound.onclick();
     }
-    document.onkeydown = function(e) {
+    document.onkeydown = function (e) {
         game.handleKey(e);
     };
 };
