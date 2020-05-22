@@ -66,8 +66,8 @@ VALUES_TLAXCATLAXTOL = {
     "a": 1,
     "c": 4,
     "e": 7,
-    "h": 6,
-    "i": 3,
+    "h": 7,
+    "i": 2,
     "l": 1,
     "m": 8,
     "n": 7,
@@ -132,7 +132,7 @@ function Ragaman() {
         soundoff: document.getElementById("mute"),
         soundon: document.getElementById("high")
     };
-    this.lang = "spanish";
+    this.lang = "tlaxcatlahtol";
     this.init();
 }
 
@@ -211,7 +211,7 @@ Ragaman.prototype.second = function () {
                 i++;
             }
             if (this.score > 0 && i < 10) {
-                this.scores.splice(i, 0, [this.pool, this.score]);
+                this.scores.splice(i, 0, [this.alreadyGuessed, this.score]);
                 if (this.scores.length > 10) {
                     this.scores.pop();
                 }
@@ -311,6 +311,8 @@ Ragaman.prototype.getWordNode = function (word, score) {
         a.href = "http://dictionary.reference.com/browse/" + word + "?s=t";
     } else if (this.lang === "spanish") {
         a.href = "http://dle.rae.es/?w=" + word;
+    } else if (this.lang === "tlaxcatlahtol") {
+        a.href = "http://www.gdn.unam.mx/diccionario/consultar/palabra/" + word;
     }
     a.appendChild(guessSpan);
     return a;
@@ -344,17 +346,27 @@ Ragaman.prototype.getPossibleWords = function (pool) {
         // look through word, remove each character from pool
         // if a char is not found, this is not a match
         for (var ci = 0; ci < SORTED_WORDS[i][0].length; ci++) {
-            console.log("SORTED_WORDS[" + i + "][0][" + ci + "]=" + SORTED_WORDS[i][0][ci]);
+            //console.log("SORTED_WORDS[" + i + "][0][" + ci + "]=" + SORTED_WORDS[i][0][ci]);
             index = pool.indexOf(SORTED_WORDS[i][0][ci]);
+            //console.log("index:"+index)
             if (index === -1) {
                 match = false;
                 break;
             } else {
+               // console.log("pool:"+JSON.stringify(pool))
                 pool = pool.slice(0, index) + pool.slice(index + 1);
+               // console.log("pool modified:"+JSON.stringify(pool))
             }
         }
+        console.log();
         if (match) {
-            this.possibleWords.push(ALL_WORDS[SORTED_WORDS[i][1]]);
+            // console.log("matched")
+            // console.log("ALL_WORDS"+JSON.stringify(ALL_WORDS))
+            // console.log("sorted word:"+SORTED_WORDS[i])
+            // console.log("sorted word index:-"+SORTED_WORDS[i][1]+"-")
+            // console.log("allwords match:"+ALL_WORDS[SORTED_WORDS[i][1]])
+            this.possibleWords.push(ALL_WORDS[parseInt(SORTED_WORDS[i][1])]);
+            // console.log("possibleWords:"+JSON.stringify(this.possibleWords))
         }
     }
 };
@@ -474,6 +486,7 @@ function getDict(language) {
             }
             // remove last newline
             SORTED_WORDS.splice(SORTED_WORDS.length - 1, 1);
+            // console.log("SORTED_WORDS:"+JSON.stringify(SORTED_WORDS))
         }
     };
     sortedR.open('GET', 'dicts/' + language + '_sorted.txt', true);

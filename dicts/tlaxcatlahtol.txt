@@ -7,6 +7,7 @@ acuitzilli
 ahcol
 ahuacatl
 ahuehuetl
+altepan
 altepetl
 amatl
 amatomin
@@ -18,6 +19,7 @@ atl
 atzitzicuilotl
 axcan
 axolotl
+ayatl
 ayotl
 ayotoch
 azcatl
@@ -28,6 +30,7 @@ cacalach
 cacayahua
 cactli
 calaqui
+calatl
 calli
 calmachtic
 camac
@@ -48,6 +51,7 @@ cecemi
 cehuia
 cemicac
 cempoal
+cencahua
 cencoatl
 cequin
 chicahuac
@@ -67,6 +71,7 @@ chichitia
 chichina
 chichinoa
 chihua
+chimalli
 chinamitl
 chipahuac
 chiquihuitl
@@ -134,6 +139,7 @@ ilhui
 ilhuitl
 ilhuicac
 ilnamiqui
+imin
 in
 itech
 itzcuin
@@ -145,6 +151,7 @@ ixtlahuaca
 ixtli
 ixtololo
 iztac
+iztatl
 maca
 machtia
 macuil
@@ -235,9 +242,11 @@ pahtli
 pehua
 pepena
 petatl
+petlacalli
 pilli
 piloa
 pinacatl
+pinolli
 pipiloli
 pitzahuac
 pixca
@@ -247,6 +256,8 @@ poctli
 pohtli
 pohua
 poloa
+popoca
+popotl
 quech
 quechqui
 quechquimitl
@@ -288,9 +299,14 @@ tianquiztli
 tlalconetl
 tlami
 tlapalcatl
+tlapalli
+tlapana
+tlapantli
+tlatemati
 tepalcatl
 tepetatl
 tepetl
+teponaztli
 tepoz
 tepoztototl
 tapoztli
@@ -382,6 +398,8 @@ xomulli
 xonacatl
 xopil
 xopiltenan
+xoquializtli
+xoxo
 xoxoc
 xoxohtic
 xoxocotl
